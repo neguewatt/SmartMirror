@@ -1,0 +1,95 @@
+<div ng-controller="dashboardCtrl" class="dashPage">
+
+    <div layout="row">
+
+        <div layout-padding="5">
+            <md-fab-speed-dial md-open="false" md-direction="{{selectedDirection}}"
+                         ng-class="selectedMode">
+                <md-fab-trigger >
+                    <md-button class="md-fab md-primary hello">
+                        <h1 layout-padding="5">Bonjour,<br>{{name}}</h1>
+                    </md-button>
+                </md-fab-trigger>
+                <md-fab-actions>
+                        <md-button class="md-fab md-raised md-mini" ng-click="calendarEnable = !calendarEnable">
+                            <md-icon class="fa fa-calendar-plus-o fa-lg" aria-label="Filter"></md-icon>
+                        </md-button>
+                        <md-button class="md-fab md-raised md-mini" ng-click="mapEnable = !mapEnable">
+                            <md-icon class="fa  fa-map-o fa-lg" aria-label="Filter"></md-icon>
+                        </md-button>
+                        <md-button class="md-fab md-raised md-mini" ng-click="weatherEnable = !weatherEnable">
+                            <md-icon class="fa  fa-map-o fa-lg" aria-label="Filter"></md-icon>
+                        </md-button>
+                </md-fab-actions>
+            </md-fab-speed-dial>
+                <md-card class="circle time" layout="column" layout-align="center center">
+                    <span id="clock" class="md-subhead">{{horloges}}</span>
+                </md-card>
+        </div>
+        <span flex=""></span>
+
+        <div layout="column" class="date" flex="25">
+            <div layout-padding="50">
+                <div flex layout="row">
+                    <md-card-title-text layout="column" layout-align="start start">
+                        <span>{{dates}}</span>
+
+                    </md-card-title-text>
+                </div>
+            </div>
+            <md-card layout="column" layout-align="center center" class="circle calendar" ng-show="calendarEnable">
+
+                <div layout="column" layout-align="center center" >
+                    <md-icon class="fa fa-calendar-o fa-3x"></md-icon>
+                    <span>{{dateNumber}}</span>
+                    <br/>
+                    <span>{{dateDay}}</span>
+<!--                    <iframe src="/agenda.html" class="calendar"></iframe>-->
+                    <span>{{calendar}}</span>
+                </div>
+            </md-card>
+        </div>
+    </div>
+
+    <!-- /.row -->
+
+    <div layout="row">
+        <md-card ng-show="!weatherEnable" class="weather" layout="column" layout-align="start center" >
+            <div layout="column" layout-align="center center">
+                <div layout="column" layout-align="center center">
+                    <img class='imgweather' ng-src="{{weatherURL}}"/>
+                </div>
+                <div layout="column" layout-align="center center">
+                    <span>{{weatherCondition}}</span>
+                </div>
+                <div layout="column" layout-align="start center">
+                <span class="colorTempMax">{{tempNow}}°C</span>
+                </div>
+
+            </div>
+        </md-card>
+        <div ng-show="weatherEnable">
+            <div id="cont_9e1d9c931d1b9ab0888ca3f9722418a5"><span id="h_9e1d9c931d1b9ab0888ca3f9722418a5"><a class="LinkWid" href="http://www.tameteo.com/meteo_Gieres-Europe-France-Isere--1-25850.html" target="_blank" style="font-family:Sans-serif; font-size:13px; color:#656565;"></a></span><script type="text/javascript" async src="http://www.tameteo.com/wid_loader/9e1d9c931d1b9ab0888ca3f9722418a5"></script></div>
+        </div>
+        <span flex=""></span>
+        <div layout-padding="50" ng-show="mapEnable" flex="25">
+            <md-car-title flex layout="row">
+                <md-card-title-text layout="column" layout-align="start start">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d23291.862806500114!2d5.792801412550359!3d45.1808736303665!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1455971168811" width="300" height="300" frameborder="0" style="border:0" allowfullscreen></iframe>
+                </md-card-title-text>
+                <md-card-title-media flex layout="column" layout-align="start end">
+                    <div id="map"></div>
+                </md-card-title-media>
+            </md-car-title>
+        </div>
+    </div>
+    <div layout="row" layout-align="center" class="myview" >
+        <md-card flex="45"  class="mydashview">
+            <md-content ng-include="''"></md-content>
+        </md-card>
+
+        <md-card flex="45"  class="mydashview">
+            <md-content ng-include="''"></md-content>
+        </md-card>
+    </div>
+</div>
