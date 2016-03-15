@@ -1,4 +1,17 @@
 {
-    "name": "smartmirror",
-    "dependencies": {}
+  "name": "SmartMirror",
+  "private": true,
+  "dependencies": {
+    "ngGeolocation": "^0.0.8",
+    "angular-material": "^1.0.5",
+    "angular-loading-bar": "^0.8.0",
+    "angular-ui-router": "^0.2.18",
+    "moment": "^2.11.2",
+    "angular-messages": "^1.5.0",
+    "font-awesome": "^4.5.0",
+    "jquery": "^2.2.1",
+    "angular-route": "^1.5.0",
+    "angular-googleapi": "^0.0.2",
+    "annyang": "^2.2.1"
+  }
 }

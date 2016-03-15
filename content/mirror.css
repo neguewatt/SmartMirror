@@ -4,7 +4,21 @@
     height: 100%;
     min-width: 100%;
     max-width: 100%;
-    width: auto;
+    width: 100%;
+}
+
+md-card.myCard{
+    height: 100% !important;
+    width: 100% !important;
+}
+
+
+.colorCard{
+    background-color: #222222;
+}
+
+.colorText{
+    color: white;
 }
 
 .circle{
@@ -17,10 +31,10 @@
     line-height: 25px !important;
 }
 
-md-card.time{
-    margin-left: 50px;
+.laDate{
+    margin-top: 250% ;
     height: 70px;
-    width: 70px
+    width: 70px;
 }
 
 md-card.weather{
@@ -34,8 +48,8 @@ md-card.weather{
     padding-top: 5px;
 }
 .imgweather{
-    height: 45px;
-    width: 45px;
+    height: 70px;
+    width: 70px;
 }
 
 .button{
@@ -44,15 +58,10 @@ md-card.weather{
 
 }
 
-md-card.calendar{
-    height: 230px;
-    width: 230px
+.calendar{
+    border-left: 2px solid white;
 }
-iframe.calendar{
-    border: none;
-    width: 215px !important;
-    height: 90px
-}
+
 .date{
 
 }

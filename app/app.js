@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('miroirApp', ['ui.router', 'ngMaterial', 'ngAnimate', 'angular-loading-bar']);
+var app = angular.module('mirrorApp', ['ui.router', 'ngMaterial', 'ngAnimate', 'angular-loading-bar','ngGeolocation']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
@@ -12,7 +12,6 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
     });
 
 }]);
-
 
 
 

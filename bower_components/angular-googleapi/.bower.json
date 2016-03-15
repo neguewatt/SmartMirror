@@ -1,0 +1,25 @@
+{
+  "name": "angular-googleapi",
+  "version": "0.0.2",
+  "main": "src/angular-googleapi.js",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+    "bower_components",
+    "test",
+    "tests",
+    "vendor"
+  ],
+  "homepage": "https://github.com/gaslight/angular-googleapi",
+  "_release": "0.0.2",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.2",
+    "commit": "817dce4473ce7e4a3a5f6828f40f99b9a42d1b2a"
+  },
+  "_source": "git://github.com/gaslight/angular-googleapi.git",
+  "_target": "^0.0.2",
+  "_originalSource": "angular-googleapi",
+  "_direct": true
+}

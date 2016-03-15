@@ -1,14 +1,32 @@
 'use strict';
-app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$http', function ($scope, $log, $timeout, $interval, $http) {
+app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$http', '$geolocation',
 
-        //NAME
+    function ($scope, $log, $timeout, $interval, $http, $geolocation) {
+
+    //<---------------------------------------------------------->
+    //NAME
+
+    $scope.hello = "";
     $scope.name = "David";
+    $scope.user = {};
+
+// appel de la valeur de l'heure
+
+
+        $interval(function(){
+            if(moment().format('H') > 19){
+                $scope.hello = 'Bonsoir,';
+            } else if(moment().format('H') > 5){
+                $scope.hello = 'Bonne journée,';
+            }
+        },1000);
+
+    //<---------------------------------------------------------->
     //angular material
-    $scope.isOpen = false;
-    $scope.selectedMode = 'md-fling';
-    $scope.selectedDirection = 'right';
 
 
+
+    //<---------------------------------------------------------->
     //DATE ET HEURE
     moment.locale('fr', {
         months : "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),
@@ -69,105 +87,162 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$htt
         }
     });
 
-    var time = moment().format('LT');
-    var date = moment().format('dddd DD MMMM YYYY');
     $scope.dateNumber = moment().format('DD');
     $scope.dateDay = moment().format('dddd');
-
-//    $scope.horloges = time;
-    $scope.dates = date;
-
+    $scope.dates = moment().format('dddd, D MMMM');
+    $scope.time = moment().format('H:mm:ss');
 
 
-    function update() {
-      $('#clock').html(moment().format('H:mm'));
-    }
+    $interval(function(){
+        $scope.time = moment().format('H:mm:ss');
 
-    setInterval(update, 1000);
+    },1000);
+
+
+
 
 
     //<---------------------------------------------------------->
-
     //Géoloc
 
-    var lat = "";
-    var lng = "";
+    $geolocation.getCurrentPosition({
+        timeout: 60000
+    }).then(function(position) {
+        $scope.myPosition = position;
+        $log.error(position.coords);
+    });
 
 
-    if (navigator.geolocation)
-        navigator.geolocation.getCurrentPosition(successCallback, errorCallback);
-    else
-        alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
-
-    function successCallback(position){
-        $log.error("Latitude : " + position.coords.latitude + ", longitude : " + position.coords.longitude);
-//        var lat = position.coords.latitude;
-//        var lng = position.coords.longitude;
-//        $log.error(lat.toFixed(3)+','+lng.toFixed(3))
-//        var test = 'lat='+lat.toFixed(3)+'lng='+lng.toFixed(3);
-//        $log.error(test);
-    };
-
-    function errorCallback(error){
-        switch(error.code){
-            case error.PERMISSION_DENIED:
-                alert("L'utilisateur n'a pas autorisé l'accès à sa position");
-                break;
-            case error.POSITION_UNAVAILABLE:
-                alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
-                break;
-            case error.TIMEOUT:
-                alert("Le service n'a pas répondu à temps");
-                break;
-            }
-    };
 
     //<---------------------------------------------------------->
-
     //Weather
 
-    var nomVille = "gieres";
+        var test = 'lat=46.259lng=5.235';
+        //$scope.meteo = {};
 
-        $.getJSON('http://www.prevision-meteo.ch/services/json/gieres',
-    function(data){
-//        $log.error(data);
-        $scope.tempNow = data.current_condition.tmp;
-        $scope.weatherCondition = data.current_condition.condition;
-        $scope.weatherURL = data.current_condition.icon;
-    });
+        $http({
+            method: 'GET',
+            url: 'http://www.prevision-meteo.ch/services/json/'+test
+        })
+            .success(function (data) {
+                $interval(function(){
+                    $scope.weatherURL = data.current_condition.icon;
+                    $scope.weatherCondition = data.current_condition.condition;
+                    //$log.error(data);
+                    $scope.tempNow = data.current_condition.tmp;
+                },1000);
+
+            })
+            .error(function (data) {
+                $log.error('pas trouve')
+            });
+
+
+
+
+
 
     //<---------------------------------------------------------->
     // calendar
 
-//    CalendarService.getCalendarEvents().then(function(response) {
-//        $log.error(response);
-//        $scope.calendar = CalendarService.getFutureEvents();
-//    }, function(error) {
-//        $log.error(error);
-//    });
-    // Simple GET request example:
+        $scope.events = {};
+
+        // Your Client ID can be retrieved from your project in the Google
+        // Developer Console, https://console.developers.google.com
+        var CLIENT_ID = '512876165470-mc7n04ji7gaht9r6ng8d0nah1i5i5g30.apps.googleusercontent.com';
+        var SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"];
+
+        /**
+         * Check if current user has authorized this application.
+         */
+        $scope.checkAuth = function () {
+            console.log("checkAuth");
+            gapi.auth.authorize(
+                {client_id: CLIENT_ID, scope: SCOPES, immediate: true},
+                handleAuthResult);
+            console.log("checkAuthPass");
+        }
+
+        /**
+         * Handle response from authorization server.
+         *
+         * @param {Object} authResult Authorization result.
+         */
+        function handleAuthResult(authResult) {
+            console.log("handleAuthResult");
+                loadCalendarApi();
+        }
 
 
-//    $http({
-//      method: 'GET',
-//      url: 'agenda.html'
-//    }).then(function successCallback(response) {
-//        // this callback will be called asynchronously
-//        // when the response is available
-//        $scope.calendar = response.textContent;
-//
-//      }, function errorCallback(response) {
-//        // called asynchronously if an error occurs
-//        // or server returns response with an error status.
-//      });
+        /**
+         * Load Google Calendar client library. List upcoming events
+         * once client library is loaded.
+         */
+        function loadCalendarApi() {
+            console.log("test1")
+            gapi.client.load('calendar', 'v3', listUpcomingEvents);
+        }
+
+        /**
+         * Print the summary and start datetime/date of the next ten events in
+         * the authorized user's calendar. If no events are found an
+         * appropriate message is printed.
+         */
+        function listUpcomingEvents() {
+            var request = gapi.client.calendar.events.list({
+                'calendarId': 'primary',
+                'timeMin': (new Date()).toISOString(),
+                'showDeleted': false,
+                'singleEvents': true,
+                'maxResults': 3,
+                'orderBy': 'startTime'
+            });
+
+            request.execute(function(resp) {
+                $interval(function(){
+                    $scope.events = resp.items;
+                    console.log(resp);
+                },1000);
+            });
+        }
 
 
-    $scope.calendar =
 
 
-    //<---------------------------------------------------------->
+
+
+        //<---------------------------------------------------------->
     // Mail
 
 
+
+
+    //<---------------------------------------------------------->
+    // Map
+
+        $scope.src = "https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d44995.41974607925!2d5.7897585!3d45.1827695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1456512436577"
+
+        //<---------------------------------------------------------->
+        //Reco vocal
+
+        /*var commands =
+        {
+            'bonjour': function () {
+                $log.error('salut humain')
+            },
+            'mon nom est *nom':function(nom){
+                $scope.user.name = nom;
+                $log.error('ok');
+            },
+            'je vis à *ville':function(ville){
+                var meteo = ville;
+                $log.error(ville);
+            }
+        }
+
+        annyang.debug();
+        annyang.addCommands(commands);
+        annyang.setLanguage('fr-FR');
+        annyang.start();*/
 
 }]);
