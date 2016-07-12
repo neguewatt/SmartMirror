@@ -5,12 +5,11 @@
     min-width: 100%;
     max-width: 100%;
     width: 100%;
+    background-color: #222222;
+    color: white;
+    position: fixed;
 }
 
-md-card.myCard{
-    height: 100% !important;
-    width: 100% !important;
-}
 
 
 .colorCard{
@@ -37,12 +36,7 @@ md-card.myCard{
     width: 70px;
 }
 
-md-card.weather{
-    margin-left: 100px;
-    border-radius: 50%;
-    height: 120px;
-    width: 120px
-}
+
 .colorTempMax{
     color: red;
     padding-top: 5px;
@@ -52,16 +46,10 @@ md-card.weather{
     width: 70px;
 }
 
-.button{
-    position: static;
-    width:37%;
 
-}
 
 .calendar{
     border-left: 2px solid white;
 }
 
-.date{
 
-}

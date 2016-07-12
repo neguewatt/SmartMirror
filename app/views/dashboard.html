@@ -1,18 +1,15 @@
-<div ng-controller="dashboardCtrl" ng-init="checkAuth()" class="dashPage colorCard colorText">
-    <md-grid-list md-cols="4" md-row-height="1:1" md-gutter="12px">
+<div class="container-fluid" ng-controller="dashboardCtrl" ng-init="init()">
+    <!--<md-grid-list md-cols="4" md-row-height="1:1" md-gutter="12px">
         <md-grid-tile layout="column" layout-align="end start">
 
             <div layout="column" >
                 <span class="md-subhead" >{{hello}}</span>
-                <!--<span class="md-title">{{name}}</span>-->
-                <!--<md-button ng-init="carte" ng-click="carte = !carte">test</md-button>-->
+                &lt;!&ndash;<span class="md-title">{{name}}</span>&ndash;&gt;
+                &lt;!&ndash;<md-button ng-init="carte" ng-click="carte = !carte">test</md-button>&ndash;&gt;
             </div>
         </md-grid-tile>
-         <!--mmilieu 3 X 2-->
+         &lt;!&ndash;mmilieu 3 X 2&ndash;&gt;
         <md-grid-tile md-colspan="2" md-rowspan="3">
-
-
-                <iframe src="https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d44995.41974607925!2d5.7897585!3d45.1827695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1456512436577"  width="700" height="700" frameborder="0" style="border:0" allowfullscreen></iframe>
 
         </md-grid-tile>
         <md-grid-tile >
@@ -42,14 +39,12 @@
         </md-grid-tile>
         <md-grid-tile>
             <div layout="row" layout-align="center center">
-                <img class='imgweather' ng-src="{{weatherURL}}&nbsp;"/>
-                <span class="md-headline" >&nbsp;{{weatherCondition}}&nbsp;</span>
-                <span class="colorTempMax md-headline">&nbsp;{{tempNow}}°C</span>
+                <img class='imgweather' src="{{weather.current_condition.icon}}"&nbsp;/>
+                <span class="md-headline" >&nbsp;{{weather.current_condition.condition}}&nbsp;</span>
+                <span class="colorTempMax md-headline">&nbsp;{{weather.current_condition.tmp}}°C</span>
             </div>
         </md-grid-tile>
-    </md-grid-list>
-
-
+    </md-grid-list>-->
     <!--<div layout="row">
         <div layout="column" layout-align="start start" flex="25">
             <span class="md-subhead" >{{hello}}</span>
@@ -90,5 +85,24 @@
             <span class="colorTempMax">&nbsp;{{tempNow}}°C</span>
         </div>
     </div>-->
+
+
+    <div class="row">
+        <div class="col-lg-4">
+            <ul style="list-style-type:none">
+                <li>
+                    <img class='imgweather' src="{{weather.current_condition.icon}}"/>
+                </li>
+                <li>
+                    <span>{{weather.current_condition.condition}}</span>
+                </li>
+                <li>
+                    <span class="colorTempMax center-block">{{weather.current_condition.tmp}}°C</span>
+                </li>
+            </ul>
+            <button class="btn btn-danger">test</button>
+            <button class="btn btn-block">test</button>
+        </div>
+    </div>
 
 </div>

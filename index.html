@@ -9,9 +9,9 @@
 
     <!-- 3rd party CSS -->
 
-    <link href="bower_components/angular-material/angular-material.css" rel="stylesheet">
     <link href="bower_components/angular-loading-bar/build/loading-bar.css" rel="stylesheet">
     <link href="bower_components/font-awesome/css/font-awesome.css" rel="stylesheet">
+    <link href="bower_components/bootstrap/dist/css/bootstrap.css">
 
 
     <link href="content/mirror.css" rel="stylesheet">
@@ -22,12 +22,11 @@
 
     <!-- 3rd party libraries -->
 
-    <script src="https://apis.google.com/js/client.js"></script>
+    <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
-    <script src="bower_components/angular-material/angular-material.js"></script>
-    <script src="bower_components/angular-animate/angular-animate.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="https://apis.google.com/js/client.js"></script>
     <script src="bower_components/angular-messages/angular-messages.js"></script>
-    <script src="bower_components/angular-aria/angular-aria.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-loading-bar/build/loading-bar.js"></script>
     <script src="bower_components/moment/moment.js"></script>
@@ -54,10 +53,12 @@
     <script src="app/controllers/dashboardCtrl.js"></script>
     <script src="app/controllers/testcontroller.js"></script>
 
+
+
 </head>
 
 
-<body ng-app="mirrorApp">
+<body ng-app="mirrorApp" class="dashPage">
 
     <div ui-view></div>
 

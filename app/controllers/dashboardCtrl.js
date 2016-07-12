@@ -1,7 +1,30 @@
 'use strict';
-app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$http', '$geolocation',
+app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$geolocation', 'mirrorService',
 
-    function ($scope, $log, $timeout, $interval, $http, $geolocation) {
+    function ($scope, $log, $timeout, $interval, $geolocation, mirrorService) {
+
+    //<---------------------------------------------------------->
+    // INIT
+
+        $scope.init = function(){
+            $scope.showMeteo();
+            /*$scope.showMap();*/
+           /* $scope.checkAuth();*/
+            /*$scope.calendar();*/
+        };
+
+        //<---------------------------------------------------------->
+        //Géoloc
+
+        $geolocation.getCurrentPosition({
+            timeout: 60000
+        }).then(function(position) {
+            $scope.myPosition = position;
+            $log.debug(position.coords.latitude);
+            $log.debug(position.coords.longitude);
+            $scope.lat = position.coords.latitude;
+            $scope.long = position.coords.longitude;
+        });
 
     //<---------------------------------------------------------->
     //NAME
@@ -14,20 +37,17 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$htt
 
 
         $interval(function(){
-            if(moment().format('H') > 19){
+            if(moment().format('H') > 19 && moment().format('H') < 5){
                 $scope.hello = 'Bonsoir,';
             } else if(moment().format('H') > 5){
                 $scope.hello = 'Bonne journée,';
             }
         },1000);
 
-    //<---------------------------------------------------------->
-    //angular material
-
 
 
     //<---------------------------------------------------------->
-    //DATE ET HEURE
+    //DATE
     moment.locale('fr', {
         months : "janvier_février_mars_avril_mai_juin_juillet_août_septembre_octobre_novembre_décembre".split("_"),
         monthsShort : "janv._févr._mars_avr._mai_juin_juil._août_sept._oct._nov._déc.".split("_"),
@@ -102,42 +122,24 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$htt
 
 
 
-    //<---------------------------------------------------------->
-    //Géoloc
 
-    $geolocation.getCurrentPosition({
-        timeout: 60000
-    }).then(function(position) {
-        $scope.myPosition = position;
-        $log.error(position.coords);
-    });
 
 
 
     //<---------------------------------------------------------->
     //Weather
 
-        var test = 'lat=46.259lng=5.235';
+        var coord = 'lat=46.259lng=5.235';
         //$scope.meteo = {};
 
-        $http({
-            method: 'GET',
-            url: 'http://www.prevision-meteo.ch/services/json/'+test
-        })
-            .success(function (data) {
-                $interval(function(){
-                    $scope.weatherURL = data.current_condition.icon;
-                    $scope.weatherCondition = data.current_condition.condition;
-                    //$log.error(data);
-                    $scope.tempNow = data.current_condition.tmp;
-                },1000);
-
+        $scope.showMeteo = function(){
+            mirrorService.getMeteo(coord)
+                .success(function(data){
+                    $interval(function(){
+                        $scope.weather = data;
+                     },1000);
             })
-            .error(function (data) {
-                $log.error('pas trouve')
-            });
-
-
+        };
 
 
 
@@ -145,16 +147,16 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$htt
     //<---------------------------------------------------------->
     // calendar
 
-        $scope.events = {};
+        /*$scope.events = {};
 
         // Your Client ID can be retrieved from your project in the Google
         // Developer Console, https://console.developers.google.com
-        var CLIENT_ID = '512876165470-mc7n04ji7gaht9r6ng8d0nah1i5i5g30.apps.googleusercontent.com';
+        var CLIENT_ID = '796856605759-p36pkc95rsqfgigekuqa3t149fomr4ed.apps.googleusercontent.com';
         var SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"];
 
-        /**
+        /!**
          * Check if current user has authorized this application.
-         */
+         *!/
         $scope.checkAuth = function () {
             console.log("checkAuth");
             gapi.auth.authorize(
@@ -163,31 +165,31 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$htt
             console.log("checkAuthPass");
         }
 
-        /**
+        /!**
          * Handle response from authorization server.
          *
          * @param {Object} authResult Authorization result.
-         */
+         *!/
         function handleAuthResult(authResult) {
             console.log("handleAuthResult");
                 loadCalendarApi();
         }
 
 
-        /**
+        /!**
          * Load Google Calendar client library. List upcoming events
          * once client library is loaded.
-         */
+         *!/
         function loadCalendarApi() {
             console.log("test1")
             gapi.client.load('calendar', 'v3', listUpcomingEvents);
         }
 
-        /**
+        /!**
          * Print the summary and start datetime/date of the next ten events in
          * the authorized user's calendar. If no events are found an
          * appropriate message is printed.
-         */
+         *!/
         function listUpcomingEvents() {
             var request = gapi.client.calendar.events.list({
                 'calendarId': 'primary',
@@ -201,11 +203,18 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$htt
             request.execute(function(resp) {
                 $interval(function(){
                     $scope.events = resp.items;
-                    console.log(resp);
+                    /!*console.log(resp);*!/
                 },1000);
             });
-        }
+        }*/
 
+/*        $scope.calendar = function(key){
+            mirrorService.getcal(key).then(function(rest){
+                var key = 'AIzaSyAYFfE8n0Cg5mFMWXVCE8bPOjawD9x7bJw';
+                /!*calEvent$scope.calEvent = rest;*!/
+                $log.debug(rest);
+            })
+        }*/
 
 
 
@@ -220,7 +229,16 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval','$htt
     //<---------------------------------------------------------->
     // Map
 
-        $scope.src = "https://www.google.com/maps/embed?pb=!1m10!1m8!1m3!1d44995.41974607925!2d5.7897585!3d45.1827695!3m2!1i1024!2i768!4f13.1!5e0!3m2!1sfr!2sfr!4v1456512436577"
+        $scope.showMap = function(){
+            mirrorService.getMap().then(function(res){
+                $log.debug(res.data);
+                //$scope.map = res;
+            });
+        };
+
+
+
+
 
         //<---------------------------------------------------------->
         //Reco vocal
