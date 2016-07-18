@@ -1,4 +1,4 @@
-<div class="container-fluid" ng-controller="dashboardCtrl" ng-init="init()">
+<div ng-controller="dashboardCtrl" ng-init="init()">
     <!--<md-grid-list md-cols="4" md-row-height="1:1" md-gutter="12px">
         <md-grid-tile layout="column" layout-align="end start">
 
@@ -85,24 +85,64 @@
             <span class="colorTempMax">&nbsp;{{tempNow}}°C</span>
         </div>
     </div>-->
-
-
-    <div class="row">
-        <div class="col-lg-4">
-            <ul style="list-style-type:none">
-                <li>
-                    <img class='imgweather' src="{{weather.current_condition.icon}}"/>
-                </li>
-                <li>
-                    <span>{{weather.current_condition.condition}}</span>
-                </li>
-                <li>
-                    <span class="colorTempMax center-block">{{weather.current_condition.tmp}}°C</span>
-                </li>
-            </ul>
-            <button class="btn btn-danger">test</button>
-            <button class="btn btn-block">test</button>
+    <fieldset class="fieldDashboard dashPage">
+        <div  class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-4" >
+                        <div class="text-left" ng-show="meteo == 1">
+                            <span class="h4 colorTempMax">{{weather.current_condition.tmp}}°C</span>
+                            <img class='imgweather' src="{{weather.current_condition.icon}}"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4">
+                        <div class="col-sm-12" ng-show="heure==1">
+                            <h3 class="text-center">{{time}}</h3>
+                            <p class="text-center">{{dates}}</p>
+                        </div>
+                    </div>
+                    <fieldset class="fieldTodo col-sm-4" ng-show="liste == 1">
+                        <!--<h5 class="text-center">TODO LIST</h5>-->
+                        <div class=" col-sm-12">
+                            <ul class="todoUl" style="list-style-type:none">
+                                <li ng-repeat="todo in todos">
+                                    <input type="checkbox" ng-model="todo.done"/>
+                                    <span class="text-left myInput done-{{todo.done}}">{{todo.text}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
         </div>
-    </div>
-
+        <br/>
+        <div  class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="col-sm-8">
+                        <!--<iframe height="540px" class="col-sm-12"
+                                src= 'http://192.168.1.16/?action=stream'>
+                        </iframe>-->
+                    </div>
+                    <fieldset class="col-sm-4 fieldRss" ng-show="rubrique==1">
+                        <div class=" col-sm-12">
+                            <ul class="todoUl">
+                                <li ng-repeat="flux in fluxRss.entries | limitTo:5">
+                                    <p class="titleRSS">{{flux.title}}</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+        <br/>
+        <div  class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    test2
+                </div>
+            </div>
+        </div>
+    </fieldset>
 </div>

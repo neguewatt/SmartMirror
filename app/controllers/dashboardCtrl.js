@@ -1,39 +1,107 @@
 'use strict';
-app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$geolocation', 'mirrorService',
+app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$geolocation', 'mirrorService', 'ngXml2json',
 
-    function ($scope, $log, $timeout, $interval, $geolocation, mirrorService) {
+    function ($scope, $log, $timeout, $interval, $geolocation, mirrorService, ngXml2json) {
 
     //<---------------------------------------------------------->
     // INIT
 
+        $scope.todos = [];
         $scope.init = function(){
+
             $scope.showMeteo();
             /*$scope.showMap();*/
            /* $scope.checkAuth();*/
             /*$scope.calendar();*/
         };
 
-        //<---------------------------------------------------------->
-        //Géoloc
 
-        $geolocation.getCurrentPosition({
-            timeout: 60000
-        }).then(function(position) {
-            $scope.myPosition = position;
-            $log.debug(position.coords.latitude);
-            $log.debug(position.coords.longitude);
-            $scope.lat = position.coords.latitude;
-            $scope.long = position.coords.longitude;
-        });
+        //<---------------------------------------------------------->
+        //Reco vocal
+
+
+        var rubrique1 = 'http://www.lemonde.fr/rss/une.xml';
+        var rubrique2 = 'http://www.lemonde.fr/ingenieurs-sciences/rss_full.xml';
+        var cinema = 'http://rss.allocine.fr/ac/cine/cettesemaine?format=xml';
+        var myListe;
+        var commands =
+        {
+            'Afficher l\'heure et la météo':function(){
+                $scope.heure = 1;
+                $scope.meteo =1;
+            },
+            'Fermer l\'heure et la météo':function(){
+                $scope.heure = 0;
+                $scope.meteo =0;
+            },
+            'Afficher l\'heure':function(){
+                $scope.heure = 1;
+            },
+            'Fermer l\'heure':function(){
+                $scope.heure = 0;
+            },
+            'Afficher la météo':function(){
+                $scope.meteo = 1;
+            },
+            'Fermer la météo':function(){
+                $scope.meteo = 0;
+            },
+            'ajouter *liste':function(liste){
+                myListe = liste;
+                $scope.liste = 1;
+                $scope.todos.push({text: myListe, done:false});
+            },
+            'Afficher liste':function(){
+                $scope.liste = 1;
+            },
+            'Fermer liste':function(){
+                $scope.liste = 0;
+            },
+            'Afficher (la) rubrique une':function(){
+                mirrorService.getFluxRss(rubrique1).then(function(res){
+                    //$interval(function(){
+                    $scope.rubrique = 1;
+                    $scope.fluxRss = res.data.responseData.feed;
+                    //},1000)
+                })
+            },
+            'Afficher (la) rubrique deux':function(){
+                mirrorService.getFluxRss(rubrique2).then(function(res){
+                    //$interval(function(){
+                    $scope.rubrique = 1;
+                    $scope.fluxRss = res.data.responseData.feed;
+                    //},1000)
+                })
+            },
+            'Afficher (les) sorties ciné':function(){
+                mirrorService.getFluxRss(cinema).then(function(res){
+                    //$interval(function(){
+                    $scope.rubrique = 1;
+                    $scope.fluxRss = res.data.responseData.feed;
+                    //},1000)
+                })
+            },
+            'Fermer (la) rubrique':function(){
+                $scope.rubrique = 0;
+            },
+            'Tout fermer':function(){
+                $scope.rubrique = 0;
+                $scope.liste = 0;
+                $scope.meteo = 0;
+                $scope.heure = 0;
+            }
+
+
+        };
+
+        annyang.debug();
+        annyang.addCommands(commands);
+        annyang.setLanguage('fr-FR');
+        annyang.start();
+
 
     //<---------------------------------------------------------->
-    //NAME
-
-    $scope.hello = "";
-    $scope.name = "David";
-    $scope.user = {};
-
-// appel de la valeur de l'heure
+    // appel de la valeur de l'heure
 
 
         $interval(function(){
@@ -110,38 +178,63 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
     $scope.dateNumber = moment().format('DD');
     $scope.dateDay = moment().format('dddd');
     $scope.dates = moment().format('dddd, D MMMM');
-    $scope.time = moment().format('H:mm:ss');
+    $scope.time = moment().format('H:mm');
 
 
     $interval(function(){
-        $scope.time = moment().format('H:mm:ss');
+        $scope.time = moment().format('H:mm');
 
     },1000);
 
 
 
+    //<---------------------------------------------------------->
+    //TODOLIST
 
-
-
-
-
+        $scope.clearCompleted = function () {
+            $scope.todos = _.filter($scope.todos, function(todo){
+                return !todo.done;
+            });
+        };
 
     //<---------------------------------------------------------->
-    //Weather
+    // Flux RSS le monde
 
-        var coord = 'lat=46.259lng=5.235';
-        //$scope.meteo = {};
 
-        $scope.showMeteo = function(){
-            mirrorService.getMeteo(coord)
-                .success(function(data){
-                    $interval(function(){
-                        $scope.weather = data;
-                     },1000);
-            })
+        $scope.cineRss = function(){
+                mirrorService.getrssCine().then(function(res){
+                    //$interval(function(){
+                    $log.debug(res);
+                    $scope.cinema = res.data.responseData.feed;
+                    //},1000)
+                })
+
         };
 
 
+        $scope.video = 'http://192.168.1.16/?action=stream';
+
+
+        //<---------------------------------------------------------->
+        //Géoloc & weather
+
+        $scope.showMeteo = function() {
+            $geolocation.getCurrentPosition({
+                timeout: 10000
+            }).then(function (position) {
+                $scope.myPosition = position;
+                $scope.lat = position.coords.latitude;
+                $scope.long = position.coords.longitude;
+                $interval(function () {
+                    var coordonee = 'lat=' + $scope.lat.toFixed(3) + 'lng=' + $scope.long.toFixed(3);
+                    mirrorService.getMeteo(coordonee)
+                        .success(function (data) {
+                            $scope.weather = data;
+                        })
+                }, 1000)
+
+            });
+        }
 
 
     //<---------------------------------------------------------->
@@ -218,14 +311,6 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
 
 
 
-
-
-        //<---------------------------------------------------------->
-    // Mail
-
-
-
-
     //<---------------------------------------------------------->
     // Map
 
@@ -240,27 +325,6 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
 
 
 
-        //<---------------------------------------------------------->
-        //Reco vocal
 
-        /*var commands =
-        {
-            'bonjour': function () {
-                $log.error('salut humain')
-            },
-            'mon nom est *nom':function(nom){
-                $scope.user.name = nom;
-                $log.error('ok');
-            },
-            'je vis à *ville':function(ville){
-                var meteo = ville;
-                $log.error(ville);
-            }
-        }
-
-        annyang.debug();
-        annyang.addCommands(commands);
-        annyang.setLanguage('fr-FR');
-        annyang.start();*/
 
 }]);

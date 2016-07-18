@@ -1,6 +1,6 @@
 'use strict';
 
-var app = angular.module('mirrorApp', ['ui.router', 'angular-loading-bar','ngGeolocation']);
+var app = angular.module('mirrorApp', ['ui.router', 'angular-loading-bar','ngGeolocation', 'angularXml2json']);
 
 app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $urlRouterProvider) {
 
@@ -15,7 +15,7 @@ app.config(['$stateProvider', '$urlRouterProvider', function ($stateProvider, $u
 
 app.service('mirrorService', function($http){
 
-    delete $http.defaults.headers.common['X-Requested-With'];
+
 
     this.getMeteo = function (coord) {
         return $http({
@@ -31,6 +31,10 @@ app.service('mirrorService', function($http){
         })
     };
 
+    this.getFluxRss = function(rubrique){
+        return $http.jsonp('//ajax.googleapis.com/ajax/services/feed/load?v=1.0&num=50&callback=JSON_CALLBACK&q=' + encodeURIComponent(rubrique));
+    };
+
 
 /*    this.getcal = function(key){
         return $http({
@@ -44,7 +48,9 @@ app.service('mirrorService', function($http){
 
 
 
-app.config(['$logProvider', function ($logProvider) {
+app.config(['$logProvider','$httpProvider', function ($logProvider, $httpProvider) {
     $logProvider.debugEnabled(true);
-}]);
+    delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
+
+}]);
