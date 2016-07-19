@@ -10,6 +10,13 @@
     position: fixed;
 }
 
+.menu{
+    font-size: 10px;
+    padding-bottom: 0px;
+    padding-top: 2px;
+    margin: 0px;
+}
+
 .todoUl{
     list-style-type:none;
     padding-left: 0px;
@@ -26,7 +33,8 @@ li input[type="checkbox"] {
 }
 
 .fieldRss{
-    border: solid 1px white;
+    border: solid 1px #00b3ee;
+    border-radius: 10%;
 }
 
 .fieldTodo{
@@ -40,10 +48,17 @@ li input[type="checkbox"] {
 }
 
 .titleRSS{
-    font-family: "Arial Hebrew";
-    font-size: 12px;
+    font-family: Comic Sans, Comic Sans MS, cursive;
+
+    font-size: 13px;
 }
 
+.liRss{
+    border-bottom: solid 1px white;
+    padding-top: 5px;
+    padding-bottom: 3px;
+    margin-bottom: 0px;
+}
 
 .done-true {
     text-decoration: line-through;

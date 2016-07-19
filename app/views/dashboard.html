@@ -102,7 +102,7 @@
                         </div>
                     </div>
                     <fieldset class="fieldTodo col-sm-4" ng-show="liste == 1">
-                        <!--<h5 class="text-center">TODO LIST</h5>-->
+                        <h5 class="text-center">TODO LIST</h5>
                         <div class=" col-sm-12">
                             <ul class="todoUl" style="list-style-type:none">
                                 <li ng-repeat="todo in todos">
@@ -119,16 +119,40 @@
         <div  class="container">
             <div class="row">
                 <div class="col-sm-12">
-                    <div class="col-sm-8">
-                        <!--<iframe height="540px" class="col-sm-12"
-                                src= 'http://192.168.1.16/?action=stream'>
-                        </iframe>-->
+<!--                    <div class="col-sm-8" ng-show="rubrique==0">
+&lt;!&ndash;                        <iframe height="540px" class="col-sm-12"
+                            src= 'http://192.168.1.16/?action=stream'>
+                        </iframe>&ndash;&gt;
+                    </div>-->
+                    <div class="col-sm-4">
+                        <fieldset class="col-sm-12 fieldRss" ng-show="rubrique==1">
+                                <ul class="todoUl">
+                                    <li class="text-center">
+                                        <i class="fa fa-3x fa-newspaper-o"></i>&nbsp;&nbsp;<i class="fa fa-3x fa-newspaper-o"></i>&nbsp;&nbsp;<i class="fa fa-3x fa-newspaper-o"></i>
+                                    </li>
+                                    <li ng-repeat="flux in fluxRss.entries | limitTo:5">
+                                        <p class="titleRSS liRss">{{flux.title}}</p>
+                                    </li>
+                                </ul>
+                        </fieldset>
                     </div>
-                    <fieldset class="col-sm-4 fieldRss" ng-show="rubrique==1">
+                    <div class="col-sm-4">
+                        <fieldset class="fieldRss col-sm-12" ng-show="menu==1">
+                            <ul class="todoUl">
+                                <li ng-repeat="menu in menus">
+                                    <p class="menu">{{menu}}</p>
+                                </li>
+                            </ul>
+                        </fieldset>
+                    </div>
+                    <fieldset class="col-sm-4 fieldRss" ng-show="cinema==1">
                         <div class=" col-sm-12">
                             <ul class="todoUl">
-                                <li ng-repeat="flux in fluxRss.entries | limitTo:5">
-                                    <p class="titleRSS">{{flux.title}}</p>
+                                <li class="text-center">
+                                    <i class="fa fa-3x fa-film"></i>&nbsp;&nbsp;<i class="fa fa-3x fa-film"></i>&nbsp;&nbsp;<i class="fa fa-3x fa-film"></i>
+                                </li>
+                                <li ng-repeat="cine in fluxCinema.entries | limitTo:5">
+                                    <p class="titleRSS liRss">{{cine.title}}</p>
                                 </li>
                             </ul>
                         </div>
@@ -136,13 +160,6 @@
                 </div>
             </div>
         </div>
-        <br/>
-        <div  class="container">
-            <div class="row">
-                <div class="col-sm-12">
-                    test2
-                </div>
-            </div>
-        </div>
     </fieldset>
 </div>
+

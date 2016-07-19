@@ -5,11 +5,30 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
 
     //<---------------------------------------------------------->
     // INIT
+        $scope.menus = ['Afficher le menu',
+            'Fermer le menu',
+            'Afficher l\'heure et la météo',
+            'Fermer l\'heure et la météo',
+            'Afficher l\'heure',
+            'Fermer l\'heure',
+            'Afficher la météo',
+            'Fermer la météo',
+            'ajouter *liste',
+            'Afficher liste',
+            'Fermer liste',
+            'Afficher (la) rubrique une',
+            'Afficher (la) rubrique deux',
+            'Afficher (les) sorties ciné',
+            'Fermer (la) rubrique',
+            'Tout fermer',
+            'Tout afficher'];
 
         $scope.todos = [];
         $scope.init = function(){
 
             $scope.showMeteo();
+            $scope.fluxRSSJT();
+            $scope.cineRss();
             /*$scope.showMap();*/
            /* $scope.checkAuth();*/
             /*$scope.calendar();*/
@@ -26,6 +45,12 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
         var myListe;
         var commands =
         {
+            '(Afficher le) menu':function(){
+                $scope.menu = 1;
+            },
+            'Fermer le menu':function(){
+                $scope.menu = 0;
+            },
             'Afficher l\'heure et la météo':function(){
                 $scope.heure = 1;
                 $scope.meteo =1;
@@ -73,15 +98,18 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
                     //},1000)
                 })
             },
+            'Fermer (la) rubrique':function(){
+                $scope.rubrique = 0;
+            },
             'Afficher (les) sorties ciné':function(){
-                mirrorService.getFluxRss(cinema).then(function(res){
+                mirrorService.getFluxRssCinema(cinema).then(function(res){
                     //$interval(function(){
-                    $scope.rubrique = 1;
-                    $scope.fluxRss = res.data.responseData.feed;
+                    $scope.cinema = 1;
+                    $scope.fluxCinema = res.data.responseData.feed;
                     //},1000)
                 })
             },
-            'Fermer (la) rubrique':function(){
+            'Fermer (les) sortie ciné':function(){
                 $scope.rubrique = 0;
             },
             'Tout fermer':function(){
@@ -89,6 +117,26 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
                 $scope.liste = 0;
                 $scope.meteo = 0;
                 $scope.heure = 0;
+                $scope.cinema = 0;
+                $scope.menu = 0;
+            },
+            'Tout afficher':function(){
+                mirrorService.getFluxRss(rubrique1).then(function(res){
+                    //$interval(function(){
+                    $scope.rubrique = 1;
+                    $scope.fluxRss = res.data.responseData.feed;
+                    //},1000)
+                });
+                mirrorService.getFluxRssCinema(cinema).then(function(res){
+                    //$interval(function(){
+                    $scope.cinema = 1;
+                    $scope.fluxCinema = res.data.responseData.feed;
+                    //},1000)
+                });
+                $scope.liste = 1;
+                $scope.meteo = 1;
+                $scope.heure = 1;
+                $scope.menu = 0;
             }
 
 
@@ -98,6 +146,7 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
         annyang.addCommands(commands);
         annyang.setLanguage('fr-FR');
         annyang.start();
+
 
 
     //<---------------------------------------------------------->
@@ -202,14 +251,28 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
 
 
         $scope.cineRss = function(){
-                mirrorService.getrssCine().then(function(res){
-                    //$interval(function(){
-                    $log.debug(res);
-                    $scope.cinema = res.data.responseData.feed;
-                    //},1000)
-                })
-
+            mirrorService.getFluxRssCinema(cinema).then(function(res){
+                $interval(function(){
+                    $scope.cinema = 1;
+                    $scope.fluxCinema = res.data.responseData.feed;
+                },3600000)
+            });
         };
+
+        $scope.fluxRSSJT = function(){
+            mirrorService.getFluxRss(rubrique1).then(function(res){
+                $interval(function(){
+                    $scope.rubrique = 1;
+                    $scope.fluxRss = res.data.responseData.feed;
+                },3600000)
+            });
+            mirrorService.getFluxRss(rubrique2).then(function(res){
+                $interval(function(){
+                    $scope.rubrique = 1;
+                    $scope.fluxRss = res.data.responseData.feed;
+                },3600000)
+            });
+        }
 
 
         $scope.video = 'http://192.168.1.16/?action=stream';
@@ -314,12 +377,12 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
     //<---------------------------------------------------------->
     // Map
 
-        $scope.showMap = function(){
+/*        $scope.showMap = function(){
             mirrorService.getMap().then(function(res){
                 $log.debug(res.data);
                 //$scope.map = res;
             });
-        };
+        };*/
 
 
 
