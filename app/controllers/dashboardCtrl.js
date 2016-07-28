@@ -29,6 +29,8 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
             $scope.showMeteo();
             $scope.fluxRSSJT();
             $scope.cineRss();
+            $scope.total();
+            $scope.euro();
             /*$scope.showMap();*/
            /* $scope.checkAuth();*/
             /*$scope.calendar();*/
@@ -45,6 +47,9 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
         var myListe;
         var commands =
         {
+            '(Afficher mes) économie':function(){
+                $scope.economie = 1;
+            },
             '(Afficher le) menu':function(){
                 $scope.menu = 1;
             },
@@ -73,11 +78,13 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
             },
             'ajouter *liste':function(liste){
                 myListe = liste;
+                $scope.economie =0;
                 $scope.liste = 1;
                 $scope.todos.push({text: myListe, done:false});
             },
             'Afficher liste':function(){
                 $scope.liste = 1;
+                $scope.economie =0;
             },
             'Fermer liste':function(){
                 $scope.liste = 0;
@@ -119,6 +126,7 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
                 $scope.heure = 0;
                 $scope.cinema = 0;
                 $scope.menu = 0;
+                $scope.economie = 0;
             },
             'Tout afficher':function(){
                 mirrorService.getFluxRss(rubrique1).then(function(res){
@@ -142,11 +150,17 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
 
         };
 
+
+
         annyang.debug();
         annyang.addCommands(commands);
         annyang.setLanguage('fr-FR');
         annyang.start();
-
+        /*annyang.addCallback('error', function() {
+            annyang.end();
+            $log.error('There was an error!');
+            annyang.start();
+        });*/
 
 
     //<---------------------------------------------------------->
@@ -228,7 +242,7 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
     $scope.dateDay = moment().format('dddd');
     $scope.dates = moment().format('dddd, D MMMM');
     $scope.time = moment().format('H:mm');
-
+    $scope.week = moment().format('W');
 
     $interval(function(){
         $scope.time = moment().format('H:mm');
@@ -300,7 +314,29 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
         }
 
 
-    //<---------------------------------------------------------->
+
+
+        //<---------------------------------------------------------->
+        // Economie
+
+        $scope.total = function(){
+            var total = 1;
+            var week;
+            for (week = 0; week < $scope.week; week++) {
+                total = week + total;
+                $scope.total = total;
+            }
+        };
+        $scope.euro = function(){
+            var euro = 0;
+            var week;
+            for (week = 0; week < $scope.week; week++) {
+                euro = week + 1;
+                $scope.euro = euro;
+            }
+        };
+
+        //<---------------------------------------------------------->
     // calendar
 
         /*$scope.events = {};
@@ -364,7 +400,7 @@ app.controller('dashboardCtrl', ['$scope', '$log', '$timeout', '$interval', '$ge
             });
         }*/
 
-/*        $scope.calendar = function(key){
+        /*        $scope.calendar = function(key){
             mirrorService.getcal(key).then(function(rest){
                 var key = 'AIzaSyAYFfE8n0Cg5mFMWXVCE8bPOjawD9x7bJw';
                 /!*calEvent$scope.calEvent = rest;*!/

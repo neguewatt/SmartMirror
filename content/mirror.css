@@ -32,6 +32,11 @@ li input[type="checkbox"] {
     width: 30px;
 }
 
+.fieldEuro{
+    border: solid 1px white;
+    border-radius: 10%;
+    background-color: darkolivegreen;
+}
 .fieldRss{
     border: solid 1px #00b3ee;
     border-radius: 10%;
