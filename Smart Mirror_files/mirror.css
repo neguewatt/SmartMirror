@@ -1,0 +1,77 @@
+.dashPage{
+    min-height: 100%;
+    max-height: 100%;
+    height: 100%;
+    min-width: 100%;
+    max-width: 100%;
+    width: 100%;
+    background-color: #222222;
+    color: white;
+    position: fixed;
+}
+
+.myInput{
+    color: black;
+}
+
+li input[type="checkbox"] {
+    width: 40px;
+}
+
+.fieldTodo{
+    border: solid 1px white;
+    background-color: rgb(255, 255, 141);
+}
+
+.fieldDashboard{
+    border: solid 2px white;
+    padding: 10px 0px 10px 0px;
+}
+
+.done-true {
+    text-decoration: line-through;
+    color: #ddd;
+}
+
+
+.colorCard{
+    background-color: #222222;
+}
+
+.colorText{
+    color: white;
+}
+
+.circle{
+    border-radius: 50%
+}
+
+.hello{
+    height: 165px !important;
+    width: 165px !important;
+    line-height: 25px !important;
+}
+
+.laDate{
+    margin-top: 250% ;
+    height: 70px;
+    width: 70px;
+}
+
+
+.colorTempMax{
+    color: red;
+    padding-top: 5px;
+}
+.imgweather{
+    height: 70px;
+    width: 70px;
+}
+
+
+
+.calendar{
+    border-left: 2px solid white;
+}
+
+
